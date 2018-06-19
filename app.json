@@ -1,8 +1,0 @@
-{
-  "name": "QuickNode",
-  "description": "App for integration with Quickbooks",
-  "repository": "https://github.com/danjrauch/quickbooks",
-  "logo": "imgs/pageicon.png",
-  "keywords": ["node", "express", "heroku"],
-  "image": "imgs/pageicon.png"
-}
