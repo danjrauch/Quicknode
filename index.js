@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser('brad'));
 app.use(session({ resave: false, saveUninitialized: false, secret: 'smith' }));
 
-app.listen(process.env.PORT || 5000, function () {
+app.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
 });
 
@@ -53,7 +53,7 @@ function generateAntiForgery (session) {
 app.get('/requestToken', function (req, res) {
   var redirecturl = QuickBooks.AUTHORIZATION_URL +
     '?client_id=' + consumerKey +
-    '&redirect_uri=' + encodeURIComponent('https://secure-basin-34113.herokuapp.com/callback/') + //encodeURIComponent('http://localhost:' + port + '/callback/') +  // LOCAl Make sure this path matches entry in application dashboard
+    '&redirect_uri=' + encodeURIComponent('https://quicknode.herokuapp.com/callback/') + //encodeURIComponent('http://localhost:' + port + '/callback/') +  // LOCAl Make sure this path matches entry in application dashboard
     '&scope=com.intuit.quickbooks.accounting' +
     '&response_type=code' +
     '&state=' + generateAntiForgery(req.session);
@@ -74,7 +74,7 @@ app.get('/callback', function (req, res) {
     form: {
       grant_type: 'authorization_code',
       code: req.query.code,
-      redirect_uri: 'https://secure-basin-34113.herokuapp.com/callback/'
+      redirect_uri: 'https://quicknode.herokuapp.com/callback/'
       //redirect_uri: 'http://localhost:' + port + '/callback/'  // LOCAL Make sure this path matches entry in application dashboard
     }
   };
