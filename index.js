@@ -61,7 +61,7 @@ app.get('/requestToken', function (req, res) {
   res.redirect(redirecturl);
 });
 
-app.get('auth/intuit/callback', function (req, res) {
+app.get('/auth/intuit/callback', function (req, res) {
   var auth = (new Buffer(consumerKey + ':' + consumerSecret).toString('base64'));
 
   var postBody = {
