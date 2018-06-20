@@ -53,7 +53,7 @@ function generateAntiForgery (session) {
 app.get('/requestToken', function (req, res) {
   var redirecturl = QuickBooks.AUTHORIZATION_URL +
     '?client_id=' + consumerKey +
-    '&redirect_uri=' + encodeURIComponent('https://developer.intuit.com/v2/OAuth2Playground/RedirectUrl') + //encodeURIComponent('http://localhost:' + port + '/callback/') +  // LOCAl Make sure this path matches entry in application dashboard
+    '&redirect_uri=' + encodeURIComponent('https://quicknode.herokuapp.com/callback/') + //encodeURIComponent('http://localhost:' + port + '/callback/') +  // LOCAl Make sure this path matches entry in application dashboard
     '&scope=com.intuit.quickbooks.accounting' +
     '&response_type=code' +
     '&state=' + generateAntiForgery(req.session);
@@ -74,7 +74,7 @@ app.get('/callback', function (req, res) {
     form: {
       grant_type: 'authorization_code',
       code: req.query.code,
-      redirect_uri: 'https://developer.intuit.com/v2/OAuth2Playground/RedirectUrl'
+      redirect_uri: 'https://quicknode.herokuapp.com/callback/'
       //redirect_uri: 'http://localhost:' + port + '/callback/'  // LOCAL Make sure this path matches entry in application dashboard
     }
   };
