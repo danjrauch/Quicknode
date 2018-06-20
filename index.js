@@ -12,6 +12,7 @@ const session = require('express-session');
 const express = require('express');
 const app = express();
 const QuickBooks = require(path.resolve( __dirname, "./nodequickbooks.js" )); //..use this syntax to resolve homemade 'require' paths
+const sf = require(path.resolve( __dirname, "./sf.js" )); 
 const Tokens = require('csrf');
 const csrf = new Tokens();
 
@@ -29,6 +30,23 @@ app.use(session({ resave: false, saveUninitialized: false, secret: 'smith' }));
 app.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+// SF
+
+app.get('/sf', function (req, res){
+  console.log('I\'m tying to get into sf'); 
+  sf().then(
+    results => { 
+      // console.log(results); 
+      res.send(results); 
+      console.log('I\'m done');  
+    }
+  ); 
+});
+
+// SF
+
+// QB
 
 // INSERT YOUR CONSUMER_KEY AND CONSUMER_SECRET HERE
 
@@ -53,7 +71,9 @@ function generateAntiForgery (session) {
 app.get('/requestToken', function (req, res) {
   var redirecturl = QuickBooks.AUTHORIZATION_URL +
     '?client_id=' + consumerKey +
-    '&redirect_uri=' + encodeURIComponent('https://quicknode.herokuapp.com/auth/intuit/callback/') + //encodeURIComponent('http://localhost:' + port + '/callback/') +  // LOCAl Make sure this path matches entry in application dashboard
+    '&redirect_uri=' + 
+    //encodeURIComponent('https://quicknode.herokuapp.com/auth/intuit/callback/') + // PROD
+    encodeURIComponent('http://localhost:' + port + '/auth/intuit/callback/') +  // LOCAl Make sure this path matches entry in application dashboard
     '&scope=com.intuit.quickbooks.accounting' +
     '&response_type=code' +
     '&state=' + generateAntiForgery(req.session);
@@ -74,8 +94,8 @@ app.get('/auth/intuit/callback', function (req, res) {
     form: {
       grant_type: 'authorization_code',
       code: req.query.code,
-      redirect_uri: 'https://quicknode.herokuapp.com/auth/intuit/callback/'
-      //redirect_uri: 'http://localhost:' + port + '/callback/'  // LOCAL Make sure this path matches entry in application dashboard
+      //redirect_uri: 'https://quicknode.herokuapp.com/auth/intuit/callback/' PROD
+      redirect_uri: 'http://localhost:' + port + '/auth/intuit/callback/'  // LOCAL Make sure this path matches entry in application dashboard
     }
   };
 
@@ -94,7 +114,7 @@ app.get('/auth/intuit/callback', function (req, res) {
                              '2.0', /* oauth version */
                              accessToken.refresh_token /* refresh token */);
 
-    console.log(qbo.token); 
+    // console.log(qbo.token); save the token here probably to postgres
 
     // qbo.findAccounts(function (_, accounts) {
     //   console.log('I\'m about to get the accounts'); 
@@ -109,3 +129,4 @@ app.get('/auth/intuit/callback', function (req, res) {
   res.send('<!DOCTYPE html><html lang="en"><head></head><body><script>window.opener.location.reload(); window.close();</script></body></html>');
 });
 
+// QB

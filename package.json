@@ -20,6 +20,7 @@
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "jsforce": "^1.8.4",
     "jxon": "^2.0.0-beta.5",
     "moment": "^2.22.2",
     "querystring": "0.2.0",
