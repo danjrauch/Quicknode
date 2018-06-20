@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser('brad'));
 app.use(session({ resave: false, saveUninitialized: false, secret: 'smith' }));
 
-app.listen(app.get('port'), function () {
+app.listen(process.env.PORT || 5000, function () {
   console.log('Express server listening on port ' + app.get('port'));
 });
 
@@ -91,7 +91,7 @@ app.get('/callback', function (req, res) {
                              true, /* turn debugging on */
                              4, /* minor version */
                              '2.0', /* oauth version */
-                            accessToken.refresh_token /* refresh token */);
+                             accessToken.refresh_token /* refresh token */);
 
     console.log(qbo.token); 
 
