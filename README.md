@@ -5,8 +5,8 @@ node.js client for integration between quickbooks and salesforce using the herok
 ## Used Libraries
 
 * node-quickbooks SDK
-    * Written by mcohen01
+    * Written by mcohen01 under ISC License
     * https://github.com/mcohen01/node-quickbooks
 * JSForce
-    * Written by ...
+    * Written by many authors under MIT License
     * https://jsforce.github.io/
