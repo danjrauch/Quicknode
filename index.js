@@ -1,24 +1,26 @@
 'use strict'
 
-var http = require('http');
-var port = process.env.PORT || 3000;
-var request = require('request');
-var qs = require('querystring');
-var util = require('util');
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
-var express = require('express');
-var app = express();
-var QuickBooks = require('../lib/index');
-var Tokens = require('csrf');
-var csrf = new Tokens();
+const http = require('http');
+const port = process.env.PORT || 3000;
+const path = require('path')
+const request = require('request');
+const qs = require('querystring');
+const util = require('util');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const express = require('express');
+const app = express();
+const QuickBooks = require('node-quickbooks');
+const Tokens = require('csrf');
+const csrf = new Tokens();
 
 QuickBooks.setOauthVersion('2.0');
 
 // Generic Express config
 app.set('port', port);
 app.set('views', 'views');
+app.use(express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser('brad'));
@@ -30,15 +32,16 @@ app.listen(app.get('port'), function () {
 
 // INSERT YOUR CONSUMER_KEY AND CONSUMER_SECRET HERE
 
-var consumerKey = 'Q0GphSloikbyU7PzvX6waihOtcLR6tEUNJ748qEJdviaVxPmB0';
-var consumerSecret = 'YFjUCiUBqMzFEHb8VY6dzloAKEMFOgqUj32vKQJg';
+const consumerKey = 'Q0GphSloikbyU7PzvX6waihOtcLR6tEUNJ748qEJdviaVxPmB0';
+const consumerSecret = 'YFjUCiUBqMzFEHb8VY6dzloAKEMFOgqUj32vKQJg';
 
 app.get('/', function (req, res) {
-  res.redirect('/start');
+  // res.redirect('/intuit');
+  res.render('pages/index.ejs');
 });
 
-app.get('/start', function (req, res) {
-  res.render('intuit.ejs', { port: port, appCenter: QuickBooks.APP_CENTER_BASE });
+app.get('/intuit', function (req, res) {
+  res.render('pages/intuit.ejs', { port: port, appCenter: QuickBooks.APP_CENTER_BASE });
 });
 
 // OAUTH 2 makes use of redirect requests
@@ -90,11 +93,15 @@ app.get('/callback', function (req, res) {
                              '2.0', /* oauth version */
                             accessToken.refresh_token /* refresh token */);
 
-    qbo.findAccounts(function (_, accounts) {
-      accounts.QueryResponse.Account.forEach(function (account) {
-        console.log(account.Name);
-      });
-    });
+    console.log(qbo.token); 
+
+    // qbo.findAccounts(function (_, accounts) {
+    //   console.log('I\'m about to get the accounts'); 
+    //   accounts.QueryResponse.Account.forEach(function (account) {
+    //     console.log(account.Name);
+        
+    //   });
+    // });
 
   });
 

@@ -1,8 +1,8 @@
 {
-  "name": "node-quickbooks",
-  "version": "2.0.23",
-  "description": "node.js client for Intuit's IPP QuickBooks V3 API.",
-  "main": "index.js",
+  "name": "quicknode",
+  "version": "0.0.1",
+  "description": "QuickNode - an app for integrating quickbooks and salesforce",
+  "main": "app.js",
   "scripts": {
     "test": "mocha"
   },
@@ -11,16 +11,17 @@
     "QuickBooks",
     "IPP"
   ],
-  "author": "Michael Cohen",
+  "author": "Dan Rauch",
   "license": "ISC",
   "dependencies": {
-    "bluebird": "3.3.4",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
+    "csrf": "^3.0.6",
+    "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "jxon": "^2.0.0-beta.5",
-    "moment": "^2.18.1",
+    "moment": "^2.22.2",
     "querystring": "0.2.0",
     "request": "2.83.0",
     "request-debug": "0.2.0",
@@ -29,10 +30,10 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "mocha": "2.2.5",
-    "expect": "0.1.1",
     "async": "0.9.0",
-    "bluebird": "2.9.25",
+    "bluebird": "^3.5.1",
+    "expect": "0.1.1",
+    "mocha": "2.2.5",
     "ramda": "0.17.1"
   },
   "directories": {
@@ -41,10 +42,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mcohen01/node-quickbooks.git"
+    "url": "https://github.com/danjrauch/quicknode.git"
   },
-  "bugs": {
-    "url": "https://github.com/mcohen01/node-quickbooks/issues"
-  },
-  "homepage": "https://github.com/mcohen01/node-quickbooks"
+  "bugs": {}
 }
