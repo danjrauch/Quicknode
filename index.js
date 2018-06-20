@@ -82,8 +82,8 @@ app.get('/requestToken', function (req, res) {
   var redirecturl = QuickBooks.AUTHORIZATION_URL +
     '?client_id=' + consumerKey +
     '&redirect_uri=' + 
-    //encodeURIComponent('https://quicknode.herokuapp.com/auth/intuit/callback/') + // PROD
-    encodeURIComponent('http://localhost:' + port + '/auth/intuit/callback/') +  // LOCAl Make sure this path matches entry in application dashboard
+    encodeURIComponent('https://quicknode.herokuapp.com/auth/intuit/callback/') + // PROD
+    //encodeURIComponent('http://localhost:' + port + '/auth/intuit/callback/') +  // LOCAl Make sure this path matches entry in application dashboard
     '&scope=com.intuit.quickbooks.accounting' +
     '&response_type=code' +
     '&state=' + generateAntiForgery(req.session);
@@ -104,8 +104,8 @@ app.get('/auth/intuit/callback', function (req, res) {
     form: {
       grant_type: 'authorization_code',
       code: req.query.code,
-      //redirect_uri: 'https://quicknode.herokuapp.com/auth/intuit/callback/' PROD
-      redirect_uri: 'http://localhost:' + port + '/auth/intuit/callback/'  // LOCAL Make sure this path matches entry in application dashboard
+      redirect_uri: 'https://quicknode.herokuapp.com/auth/intuit/callback/' //PROD
+      //redirect_uri: 'http://localhost:' + port + '/auth/intuit/callback/'  // LOCAL Make sure this path matches entry in application dashboard
     }
   };
 
