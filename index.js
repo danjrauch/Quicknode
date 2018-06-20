@@ -11,7 +11,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const express = require('express');
 const app = express();
-const QuickBooks = require('node-quickbooks');
+const QuickBooks = require(path.resolve( __dirname, "./nodequickbooks.js" )); //..use this syntax to resolve homemade 'require' paths
 const Tokens = require('csrf');
 const csrf = new Tokens();
 
