@@ -2,7 +2,7 @@
 
 const http = require('http');
 const port = process.env.PORT || 3000;
-const path = require('path')
+const path = require('path');
 const request = require('request');
 const qs = require('querystring');
 const util = require('util');
@@ -13,6 +13,8 @@ const express = require('express');
 const app = express();
 const QuickBooks = require(path.resolve( __dirname, "./nodequickbooks.js" )); //..use this syntax to resolve homemade 'require' paths
 const sf = require(path.resolve( __dirname, "./sf.js" )); 
+// const { Pool, Client } = require('pg'); 
+const db = require(path.resolve( __dirname, "./db.js" )); 
 const Tokens = require('csrf');
 const csrf = new Tokens();
 
@@ -21,7 +23,7 @@ QuickBooks.setOauthVersion('2.0');
 // Generic Express config
 app.set('port', port);
 app.set('views', 'views');
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser('brad'));
@@ -31,10 +33,24 @@ app.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
 });
 
+// PG
+
+app.get('/pg', async function (req, res){
+  console.log('I\'m trying to get into postgres'); 
+  await db.query().then(
+    results => {
+      res.send(results); 
+      console.log(results); 
+    }
+  ); 
+}); 
+
+// PG
+
 // SF
 
 app.get('/sf', async function (req, res){
-  console.log('I\'m tying to get into sf'); 
+  console.log('I\'m trying to get into sf'); 
   await sf.login('serviointeg@servio.org', 'dummyPwd123!AlkdkWcPZ6spOpNwuNWQnLI7J').then(
     results => { console.log('Logged in'); } 
   ); 
@@ -47,7 +63,7 @@ app.get('/sf', async function (req, res){
 
   await sf.query().then(
     results => { 
-      // console.log(results); 
+      console.log(results); 
       res.send(results); 
       console.log('Found accounts');  
     }

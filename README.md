@@ -10,3 +10,5 @@ node.js client for integration between quickbooks and salesforce using the herok
 * JSForce
     * Written by many authors under MIT License
     * https://jsforce.github.io/
+* Bulma CSS Framework
+    * https://bulma.io/
