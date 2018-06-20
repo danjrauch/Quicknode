@@ -33,13 +33,23 @@ app.listen(app.get('port'), function () {
 
 // SF
 
-app.get('/sf', function (req, res){
+app.get('/sf', async function (req, res){
   console.log('I\'m tying to get into sf'); 
-  sf().then(
+  await sf.login('serviointeg@servio.org', 'dummyPwd123!AlkdkWcPZ6spOpNwuNWQnLI7J').then(
+    results => { console.log('Logged in'); } 
+  ); 
+
+  await sf.insert('Clifford Estate').then(
+    results => {
+      console.log(results); 
+    }
+  ); 
+
+  await sf.query().then(
     results => { 
       // console.log(results); 
       res.send(results); 
-      console.log('I\'m done');  
+      console.log('Found accounts');  
     }
   ); 
 });
