@@ -17,12 +17,12 @@ async function sfQuery(){
   return await conn.query('SELECT Id, Name FROM Account')
 }
 
-async function sfInsert(names){
+async function sfInsert(names){ //bulkified
   return await conn.sobject('Account').insertBulk(names.map((x) => { return {Name: x} })) // {Name: name}); 
 }
 
-async function sfDelete(names){
+async function sfDelete(names){ //bulkified
   return await conn.sobject('Account')
                    .find({ Name : { $in : names} })
-                   .destroy()
+                   .destroy() 
 }
