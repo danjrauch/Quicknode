@@ -1,9 +1,10 @@
 'use strict'
 
 const http = require('http')
-const port = process.env.PORT || 3000 
+const port = process.env.PORT || 5000 
 const path = require('path')
 const request = require('request')
+const json = require('json');
 const qs = require('querystring')
 const util = require('util')
 const bodyParser = require('body-parser')
@@ -15,6 +16,7 @@ const QuickBooks = require(path.resolve( __dirname, "./nodequickbooks.js" )) //.
 const sf = require(path.resolve( __dirname, "./sf.js" ))
 // const { Pool, Client } = require('pg')
 const db = require(path.resolve( __dirname, "./db.js" ))
+const table = require(path.resolve( __dirname, "./table.js"))
 const Tokens = require('csrf')
 const csrf = new Tokens()
 
@@ -29,49 +31,92 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser('brad'))
 app.use(session({ resave: false, saveUninitialized: false, secret: 'smith' }))
 
-app.listen(app.get('port'), function () {
+app.listen(app.get('port'), () => {
   console.log('Express server listening on port ' + app.get('port'))
 })
 
 // PG
 
-app.get('/pgTest', async function (req, res){
+app.get('/pgTest', async (req, res) => {
   console.log('I\'m trying to get into postgres')
-  await db.query().then(
-    results => {
-      res.send(results)
-      console.log(results)
+
+  //..query the db and display a table with data
+  try{
+    await db.query().then(
+      results => {
+        table.createUserTable(results, res)
+      }
+    )
+    console.log('Created table')
+  }catch (err){
+    console.log(err.stack)
+  }
+})
+
+//..insert the sf accounts into db
+app.get('/insertAccounts', async (req, res) => {
+  //..insert the sf accounts into db
+  try{
+    await sf.login('serviointeg@servio.org', 'dummyPwd123!AlkdkWcPZ6spOpNwuNWQnLI7J').then(
+      results => { console.log('Logged into Salesforce') } 
+    )
+  }catch (err){
+    console.log(err.stack)
+  }
+
+  //TRANSACTION
+  await sf.query().then(async (results) => {
+    const query = {
+      text: 'INSERT INTO accounts(id, name) VALUES($1, $2)',
+      values: results.records.map((obj) => [obj.Id, obj.Name]), //..object . notation is case sensative
     }
-  )
+    await db.insert(query).then(
+      // res.redirect('/') //.. go home
+      results => {
+        //..kinda hacky
+        res.send("<head><link rel=\"icon\" type=\"image/png\" href=\"public/imgs/menuresize.png\"><link rel=\"stylesheet\" href=\"css/bulma.css\"></head>" + JSON.stringify(results, null, 2))
+      }
+    )
+  })
 })
 
 // PG
 
 // SF
 
-app.get('/sfTest', async function (req, res){
-  await sf.login('serviointeg@servio.org', 'dummyPwd123!AlkdkWcPZ6spOpNwuNWQnLI7J').then(
-    results => { console.log('Logged into Salesforce') } 
-  )
+// async function errorHandler(fn){ // ERROR HANDLING?
+//   try{
+//     await fn
+//   }catch(err){
+//     console.log(err.stack)
+//   }
+// }
 
-  await sf.insert(['hey from hell']).then(
-    results => { console.log(results) }
-  )
-
-  // Promise.all
-
-  // asynchonous 
-  await Promise.all([  
-    // sf.insert(['hey from hell']).then(
-    //   results => { res.send(results); console.log(results) }
-    // ),
-    // sf.query().then(
-    //   results => { res.send(results); console.log(results) }
-    // ), 
-    sf.delete(['hey from hell', 'Hello from hell', 'New one']).then(
-      results => { res.send(results); console.log(results) } 
+app.get('/sfTest', async (req, res) => {
+  try{
+    await sf.login('serviointeg@servio.org', 'dummyPwd123!AlkdkWcPZ6spOpNwuNWQnLI7J').then(
+      results => { console.log('Logged into Salesforce') } 
     )
-  ])
+  }catch (err){
+    console.log(err.stack)
+  }
+
+  try{
+    await Promise.all([  
+      // sf.insert(['hey from hell']).then(
+      //   results => { res.send(results); res.end(); console.log(results) }
+      // ),
+      sf.query().then(
+        results => { table.createAccountTable(results, res) }
+      ), 
+      // sf.delete(['hey from hell', 'Hello from hell', 'New one']).then(
+      //   results => { res.send(results); res.end(); console.log(results) } 
+      // )
+    ])
+    console.log('Created table')
+  }catch (err){
+    console.log(err.stack)
+  }
 })
 
 // SF
@@ -83,12 +128,12 @@ app.get('/sfTest', async function (req, res){
 const consumerKey = 'Q0GphSloikbyU7PzvX6waihOtcLR6tEUNJ748qEJdviaVxPmB0'
 const consumerSecret = 'YFjUCiUBqMzFEHb8VY6dzloAKEMFOgqUj32vKQJg'
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
   // res.redirect('/intuit')
   res.render('pages/index.ejs')
 })
 
-app.get('/intuit', function (req, res) {
+app.get('/intuit', (req, res) => {
   res.render('pages/intuit.ejs', { port: port, appCenter: QuickBooks.APP_CENTER_BASE })
 })
 
@@ -98,12 +143,12 @@ function generateAntiForgery (session) {
   return csrf.create(session.secret)
 }
 
-app.get('/requestToken', function (req, res) {
+app.get('/requestToken', (req, res) => {
   var redirecturl = QuickBooks.AUTHORIZATION_URL +
     '?client_id=' + consumerKey +
     '&redirect_uri=' + 
-    encodeURIComponent('https://quicknode.herokuapp.com/auth/intuit/callback/') + // PROD
-    //encodeURIComponent('http://localhost:' + port + '/auth/intuit/callback/') +  // LOCAl Make sure this path matches entry in application dashboard
+    //encodeURIComponent('https://quicknode.herokuapp.com/auth/intuit/callback/') + // PROD
+    encodeURIComponent('http://localhost:' + port + '/auth/intuit/callback/') +  // LOCAl Make sure this path matches entry in application dashboard
     '&scope=com.intuit.quickbooks.accounting' +
     '&response_type=code' +
     '&state=' + generateAntiForgery(req.session)
@@ -111,7 +156,7 @@ app.get('/requestToken', function (req, res) {
   res.redirect(redirecturl)
 })
 
-app.get('/auth/intuit/callback', function (req, res) {
+app.get('/auth/intuit/callback', (req, res) => {
   var auth = (new Buffer(consumerKey + ':' + consumerSecret).toString('base64'))
 
   var postBody = {
@@ -124,12 +169,12 @@ app.get('/auth/intuit/callback', function (req, res) {
     form: {
       grant_type: 'authorization_code',
       code: req.query.code,
-      redirect_uri: 'https://quicknode.herokuapp.com/auth/intuit/callback/' //PROD
-      //redirect_uri: 'http://localhost:' + port + '/auth/intuit/callback/'  // LOCAL Make sure this path matches entry in application dashboard
+      //redirect_uri: 'https://quicknode.herokuapp.com/auth/intuit/callback/' //PROD
+      redirect_uri: 'http://localhost:' + port + '/auth/intuit/callback/'  // LOCAL Make sure this path matches entry in application dashboard
     }
   }
 
-  request.post(postBody, function (e, r, data) {
+  request.post(postBody, (e, r, data) => {
     var accessToken = JSON.parse(r.body)
 
     // save the access token somewhere on behalf of the logged in user
@@ -146,20 +191,26 @@ app.get('/auth/intuit/callback', function (req, res) {
 
     // console.log(qbo.token) save the token here probably to postgres
 
-    qbo.findAccounts(async function (_, accounts) {
-      await sf.login('serviointeg@servio.org', 'dummyPwd123!AlkdkWcPZ6spOpNwuNWQnLI7J').then(
-        results => { console.log('Logged into Salesforce') } 
-      )
-      await sf.insert(accounts.QueryResponse.Account.map((x) => x.Name)).then(
-        results => { console.log(results) }
-      )
-      // .forEach(function (account) {
-      //   console.log(account.Name)
-      // })
+    qbo.findAccounts(async (_, accounts) => {
+      try{
+        await sf.login('serviointeg@servio.org', 'dummyPwd123!AlkdkWcPZ6spOpNwuNWQnLI7J').then(
+          results => { console.log('Logged into Salesforce') } 
+        )
+      }catch (err){
+        console.log(err.stack)
+      } 
+
+      try{
+        await sf.insert(accounts.QueryResponse.Account.map((x) => x.Name)).then(
+          results => { 
+            // table.createAccountTable(results, res)
+          }
+        )
+      }catch (err){
+        console.log(err.stack); 
+      }
     })
-
   })
-
   res.send('<!DOCTYPE html><html lang="en"><head></head><body><script>window.opener.location.reload(); window.close();</script></body></html>')
 })
 

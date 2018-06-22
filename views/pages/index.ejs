@@ -4,6 +4,18 @@
     Affiliation: Servio Consulting LLC.
     Using Bulma CSS Framework-->
 
+<style>
+  .footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #74766d;
+    color: white;
+    text-align: center;
+  }
+</style>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,6 +46,9 @@
               <div class="navbar-dropdown is-boxed">
                 <a class="navbar-item" href="/intuit">
                   Intuit
+                </a>
+                <a class="navbar-item" href="/insertAccounts">
+                  Insert SF Accounts into DB
                 </a>
                 <hr class="navbar-divider">
                 <a class="navbar-item" href="/pgTest">
@@ -70,8 +85,7 @@
                 </div>
               </div>
             </div>
-
-
+          </div>
         </div>
       </nav>
 
@@ -103,14 +117,28 @@
   </div>
   
   <footer class="footer">
-    <div class="field is-grouped has-test-centered">
-      <p class="control has-test-centered">
-        <a class="button is-grey" style="display:inline-block" href="">
-          <img src="public/imgs/menuresize.png" style="float:left;margin-right:0.4em">
-          <span>QuickNode by Dan Rauch</span>
-        </a>
-      </p>
-    </div>
+      <div class="columns is-centered">
+          <div class="column has-text-centered ">
+            <p class="control">
+              <a class="button is-grey" href=""> <!-- style="display:inline-block" -->
+                <img src="public/imgs/menuresize.png" style="float:left;margin-right:0.4em">
+                <span>QuickNode by Dan Rauch</span>
+              </a>
+            </p>
+          </div>
+          <!-- <div class="column has-text-centered is-2">
+            <a class="button">Button 2</a>
+          </div>
+          <div class="column has-text-centered is-2">
+            <a class="button">Button 3</a>
+          </div>
+          <div class="column has-text-centered is-2">
+            <a class="button">Button 4</a>
+          </div> -->
+        </div>
+    <!-- <div class="field is-grouped">
+      
+    </div> -->
   </footer>
 
 </body>

@@ -6,21 +6,80 @@
   <% include ../partials/authheader.ejs %>
 </head>
 <body>
-    <div class="block">
-        <section class="hero is-primary">
-          <div class="hero-body">
-            <div class="container">
-              <h1 class="title is=1">QuickNode</h1>
-              <h2 class="subtitle">Please Authenticate</h2>
+    <nav class="navbar is-transparent">
+      <div class="navbar-brand">
+        <a class="navbar-item">
+          <img src="public/imgs/menuresize.png" alt="QuickNode" width="28" height="28">
+        </a>
+      </div>
+      
+      <div id="nb" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="/">
+            Home
+          </a>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              Routes
+            </a>
+            <div class="navbar-dropdown is-boxed">
+              <a class="navbar-item" href="/intuit">
+                Intuit
+              </a>
+              <hr class="navbar-divider">
+              <a class="navbar-item" href="/pgTest">
+                DB Testing
+              </a>
+              <a class="navbar-item" href="/sfTest">
+                SF Testing
+              </a>
             </div>
           </div>
-        </section>
-      </div>
-    
-      <div class="block" style="margin-left:1.5em;">
-        <div class="block">
-          <ipp:connectToIntuit></ipp:connectToIntuit>
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="field is-grouped">
+              <p class="control">
+                <a class="button is-white" style="display:inline-block" href="https://servioconsulting.com/">
+                  <span>Powered By</span>
+                  <img src="/public/imgs/servio.png" style="float:right;margin-left:0.5em">
+                </a>
+              </p>
+            </div>
+          </div>
+          <div class="navbar-item">
+            <div class="field is-grouped">
+              <p class="control">
+                <a class="button is-black" href="https://github.com/danjrauch/quicknode">
+                  <span class="icon">
+                    <i class="fa fa-github"></i>
+                    <span>GitHub</span>
+                </a>
+              </p>
+            </div>
+          </div>
+          
+        </div>
+
+    </div>
+  </nav>
+
+  <div class="block">
+    <section class="hero is-primary">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title is=1">QuickNode</h1>
+          <h2 class="subtitle">Intuit Connector</h2>
         </div>
       </div>
+    </section>
+  </div>
+    
+  <div class="block" style="margin-left:1.5em;">
+    <div class="block">
+      <ipp:connectToIntuit></ipp:connectToIntuit>
+    </div>
+  </div>
 </body>
 </html>
