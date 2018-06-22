@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="icon" type="image/png" href="public/imgs/menuresize.png"> 
-  <link rel="stylesheet" href="node_modules/bulma/css/bulma.css"> 
+  <link rel="stylesheet" href="css/bulma.css"> 
   <title>QuickNode</title>
   <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
   <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css"></script>
@@ -24,7 +24,7 @@
       
         <div id="nb" class="navbar-menu">
           <div class="navbar-start">
-            <a class="navbar-item" href="/index.ejs">
+            <a class="navbar-item" href="/">
               Home
             </a>
             <div class="navbar-item has-dropdown is-hoverable">
@@ -48,14 +48,14 @@
 
           <div class="navbar-end">
               <div class="navbar-item">
-                  <div class="field is-grouped">
-                    <p class="control">
-                      <a class="button is-white" style="display:inline-block" href="https://servioconsulting.com/">
-                        <span>Powered By</span>
-                        <img src="/public/imgs/servio.png" style="float:right;margin-left:0.5em">
-                      </a>
-                    </p>
-                  </div>
+                <div class="field is-grouped">
+                  <p class="control">
+                    <a class="button is-white" style="display:inline-block" href="https://servioconsulting.com/">
+                      <span>Powered By</span>
+                      <img src="/public/imgs/servio.png" style="float:right;margin-left:0.5em">
+                    </a>
+                  </p>
+                </div>
               </div>
               <div class="navbar-item">
                 <div class="field is-grouped">
@@ -103,11 +103,13 @@
   </div>
   
   <footer class="footer">
-    <div class="content has-test-centered">
-      <div class="buttons is-inverted is-centered">
-        <img src="public/imgs/menuresize.png" alt="QuickNode" width="28" height="28">
-        QuickNode by Dan Rauch
-      </div>
+    <div class="field is-grouped has-test-centered">
+      <p class="control has-test-centered">
+        <a class="button is-grey" style="display:inline-block" href="">
+          <img src="public/imgs/menuresize.png" style="float:left;margin-right:0.4em">
+          <span>QuickNode by Dan Rauch</span>
+        </a>
+      </p>
     </div>
   </footer>
 
