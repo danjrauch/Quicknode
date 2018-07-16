@@ -57,7 +57,7 @@ app.get('/pgTest', async (req, res) => {
 app.get('/insertAccounts', async (req, res) => {
   //..insert the sf accounts into db
   try{
-    await sf.login('drauch.dev@hawk.iit.edu', 'vorVzakone98VV3BI3sQXdA3I9pp0qSy2eOmy').then(
+    await sf.login('drauch.dev@hawk.iit.edu', 'passwordTOKEN').then(
       results => { console.log('Logged into Salesforce') } 
     )
   }catch (err){
