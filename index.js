@@ -13,7 +13,7 @@ const session = require('express-session')
 const express = require('express')
 const app = express()
 const QuickBooks = require(path.resolve( __dirname, "./nodequickbooks.js" )) //..use this syntax to resolve homemade 'require' paths
-const sf = require(path.resolve( __dirname, "./sf.js" ))
+// const sf = require(path.resolve( __dirname, "./sf.js" ))
 // const { Pool, Client } = require('pg')
 const db = require(path.resolve( __dirname, "./db.js" ))
 const table = require(path.resolve( __dirname, "./table.js"))
@@ -57,7 +57,7 @@ app.get('/pgTest', async (req, res) => {
 app.get('/insertAccounts', async (req, res) => {
   //..insert the sf accounts into db
   try{
-    await sf.login('serviointeg@servio.org', 'dummyPwd123!AlkdkWcPZ6spOpNwuNWQnLI7J').then(
+    await sf.login('drauch.dev@hawk.iit.edu', 'vorVzakone98VV3BI3sQXdA3I9pp0qSy2eOmy').then(
       results => { console.log('Logged into Salesforce') } 
     )
   }catch (err){
@@ -92,32 +92,32 @@ app.get('/insertAccounts', async (req, res) => {
 //   }
 // }
 
-app.get('/sfTest', async (req, res) => {
-  try{
-    await sf.login('serviointeg@servio.org', 'dummyPwd123!AlkdkWcPZ6spOpNwuNWQnLI7J').then(
-      results => { console.log('Logged into Salesforce') } 
-    )
-  }catch (err){
-    console.log(err.stack)
-  }
+// app.get('/sfTest', async (req, res) => {
+//   try{
+//     await sf.login('drauch.dev@hawk.iit.edu', 'dummyPwd123!AlkdkWcPZ6spOpNwuNWQnLI7J').then(
+//       results => { console.log('Logged into Salesforce') } 
+//     )
+//   }catch (err){
+//     console.log(err.stack)
+//   }
 
-  try{
-    await Promise.all([  
-      // sf.insert(['hey from hell']).then(
-      //   results => { res.send(results); res.end(); console.log(results) }
-      // ),
-      sf.query().then(
-        results => { table.createAccountTable(results, res) }
-      ), 
-      // sf.delete(['hey from hell', 'Hello from hell', 'New one']).then(
-      //   results => { res.send(results); res.end(); console.log(results) } 
-      // )
-    ])
-    console.log('Created table')
-  }catch (err){
-    console.log(err.stack)
-  }
-})
+//   try{
+//     await Promise.all([  
+//       // sf.insert(['hey from hell']).then(
+//       //   results => { res.send(results); res.end(); console.log(results) }
+//       // ),
+//       sf.query().then(
+//         results => { table.createAccountTable(results, res) }
+//       ), 
+//       // sf.delete(['hey from hell', 'Hello from hell', 'New one']).then(
+//       //   results => { res.send(results); res.end(); console.log(results) } 
+//       // )
+//     ])
+//     console.log('Created table')
+//   }catch (err){
+//     console.log(err.stack)
+//   }
+// })
 
 // SF
 
